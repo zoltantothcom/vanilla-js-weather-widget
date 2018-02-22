@@ -1,12 +1,17 @@
 doctype html
 html(lang="en")
 head
-  meta(charset="utf-8")
-  title Weather
-  link(rel="stylesheet", href="style.min.css")
+    meta(charset="utf-8")
+    title Weather
+    link(rel="stylesheet", href="style.min.css")
 
 body
-  section
-    #weather
+    section
+        .weather
+            form
+                input.weather__input(type="text")
+                button.weather__button Submit
+            
+            .weather__result
 
-  script(src="app.min.js")
+    script(src="app.min.js")
