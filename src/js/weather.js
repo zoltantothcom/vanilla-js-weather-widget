@@ -27,7 +27,7 @@ export default class Weather {
             .then(response => { return response.json() })
             .then(data => {
                 this.location = data[0].Key
-                return fetch(`${API_URL}/currentconditions/v1/${this.location}?apikey=${API_KEY}`)
+                return fetch(`${API_URL}/currentconditions/v1/${this.location}?apikey=${API_KEY}&details=true`)
             })
             .then(response => { return response.json() })
             .then(data => {
