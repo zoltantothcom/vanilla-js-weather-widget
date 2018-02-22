@@ -8,7 +8,7 @@
 * @description
 * A vanilla JavaScript weather widget.
 */
-const API_URL = 'http://dataservice.accuweather.com'
+const API_URL = 'https://dataservice.accuweather.com'
 const API_KEY = 'Anwu0N8FAUGXlEUzxvWeEwx9eJ3OAAGS'
 
 export default class Weather {
