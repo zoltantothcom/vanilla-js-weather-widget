@@ -16,12 +16,17 @@ export default class Weather {
     constructor() {
         this.element = document.querySelector('.weather')
         this.location = null
+        this.input = this.element.querySelector('.weather__input')
+
+        this.element.querySelector('.weather__form').addEventListener('submit', e => {
+            e.preventDefault();
+            this.getCurrentWeather('Toronto')
+            //this.getCurrentWeather(this.input.value)
+        }, false)
 
         this.getCurrentWeather = this.getCurrentWeather.bind(this)
         this.getHourlyForecast = this.getHourlyForecast.bind(this)
         this.displayMessage = this.displayMessage.bind(this)
-
-        this.getCurrentWeather('Toronto')
     }
 
 
