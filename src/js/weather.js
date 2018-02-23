@@ -10,13 +10,16 @@
 */
 const API_URL = 'https://dataservice.accuweather.com'
 const API_KEY = 'Anwu0N8FAUGXlEUzxvWeEwx9eJ3OAAGS'
+const API_ERR = 'Unfortunately an API error occured.'
 
 export default class Weather {
-    constructor(options) {
+    constructor() {
+        this.element = document.querySelector('.weather')
         this.location = null
 
         this.getCurrentWeather = this.getCurrentWeather.bind(this)
         this.getHourlyForecast = this.getHourlyForecast.bind(this)
+        this.displayMessage = this.displayMessage.bind(this)
 
         this.getCurrentWeather('Toronto')
     }
@@ -27,7 +30,7 @@ export default class Weather {
             .then(response => { return response.json() })
             .then(data => {
                 this.location = data[0].Key
-                return fetch(`${API_URL}/currentconditions/v1/${this.location}?apikey=${API_KEY}&details=true`)
+                return fetch(`${API_URL}/currentconditions/v1/{this.location}?apikey=${API_KEY}&details=true`)
             })
             .then(response => { return response.json() })
             .then(data => {
@@ -35,7 +38,8 @@ export default class Weather {
                 this.getHourlyForecast();
             })
             .catch(function (err) {
-                console.log('Unfortunately an API error occured. Please try again.')
+                console.log(err)
+                this.displayMessage(API_ERR, 'error')
             });
     }
 
@@ -45,5 +49,17 @@ export default class Weather {
             .then(data => {
                 console.log(data)
             })
+            .catch(function (err) {
+                console.log(err)
+                this.displayMessage(API_ERR, 'error')
+            });
+    }
+
+    displayMessage(msg, type) {
+        let elem = document.createElement('div')
+        elem.innerText = msg;
+        elem.classList.add(`weather-${type}`)
+
+        document.querySelector('.weather__form').prepend(elem)
     }
 }
