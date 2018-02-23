@@ -12,10 +12,12 @@ body
                 input.weather__input(type="text")
                 input.weather__button(type="submit" value="Submit")
             
-            .weather__current
+            .weather__current.weather__current--hidden
+                p.weather__location
+                .weather__temperature
+                .weather__details
 
-            .weather__hourly
-
-
+            button.weather__get-hourly.weather__get-hourly--hidden Get Hourly Forecast
+            .weather__hourly.weather__hourly--hidden
 
     script(src="app.min.js")

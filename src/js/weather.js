@@ -27,6 +27,7 @@ export default class Weather {
         this.getCurrentWeather = this.getCurrentWeather.bind(this)
         this.getHourlyForecast = this.getHourlyForecast.bind(this)
         this.displayMessage = this.displayMessage.bind(this)
+        this.showCurrentConditions = this.showCurrentConditions.bind(this)
     }
 
 
@@ -39,8 +40,9 @@ export default class Weather {
             })
             .then(response => { return response.json() })
             .then(data => {
-                console.log(data)
-                this.getHourlyForecast();
+                this.showCurrentConditions(data)
+                this.element.querySelector('.weather__get-hourly').classList.remove('weather__get-hourly--hidden')
+                //this.getHourlyForecast();
             })
             .catch(function (err) {
                 console.log(err)
@@ -58,6 +60,17 @@ export default class Weather {
                 console.log(err)
                 this.displayMessage(API_ERR, 'error')
             });
+    }
+
+    showCurrentConditions(data) {
+        let temperatureElem = this.element.querySelector('.weather__temperature')
+        let detailsElem = this.element.querySelector('.weather__details')
+        let d = data[0]
+
+        console.log(data)
+
+        temperatureElem.innerHTML = `${Math.round(d.Temperature.Metric.Value)} &deg;${d.Temperature.Metric.Unit}`
+
     }
 
     displayMessage(msg, type) {
