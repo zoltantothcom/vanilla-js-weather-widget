@@ -42,6 +42,7 @@ export default class Weather {
             .then(data => {
                 this.showCurrentConditions(data)
                 this.element.querySelector('.weather__get-hourly').classList.remove('weather__get-hourly--hidden')
+                this.element.querySelector('.weather__location').innerText = `Weather in ${city}`
                 //this.getHourlyForecast();
             })
             .catch(function (err) {
