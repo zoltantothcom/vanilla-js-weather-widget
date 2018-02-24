@@ -16,6 +16,7 @@ export default class Weather {
     constructor() {
         this.element = document.querySelector('.weather')
         this.location = null
+        this.locations = {}
         this.input = this.element.querySelector('.weather__input')
 
         this.element.querySelector('.weather__form').addEventListener('submit', e => {
@@ -24,18 +25,31 @@ export default class Weather {
             //this.getCurrentWeather(this.input.value)
         }, false)
 
+        localStorage.setItem('WEATHER_LOCATIONS', JSON.stringify(this.locations));
+
         this.getCurrentWeather = this.getCurrentWeather.bind(this)
         this.getHourlyForecast = this.getHourlyForecast.bind(this)
         this.displayMessage = this.displayMessage.bind(this)
         this.showCurrentConditions = this.showCurrentConditions.bind(this)
+        this.getCachedLocations = this.getCachedLocations.bind(this)
     }
 
 
     getCurrentWeather(city) {
+        let locations = this.getCachedLocations()
+
+        if (locations[city]) {
+            console.log('cached woeid found')
+        }
+
         fetch(`${API_URL}/locations/v1/cities/search?apikey=${API_KEY}&q=${city}`)
             .then(response => { return response.json() })
             .then(data => {
                 this.location = data[0].Key
+                this.locations[city] = this.location
+
+                localStorage.setItem('WEATHER_LOCATIONS', JSON.stringify(this.locations));
+
                 return fetch(`${API_URL}/currentconditions/v1/${this.location}?apikey=${API_KEY}&details=true`)
             })
             .then(response => { return response.json() })
@@ -49,6 +63,11 @@ export default class Weather {
                 console.log(err)
                 this.displayMessage(API_ERR, 'error')
             });
+    }
+
+    getCachedLocations() {
+        let storedLocations = localStorage.getItem('WEATHER_LOCATIONS');
+        return JSON.parse(storedLocations);
     }
 
     getHourlyForecast() {
