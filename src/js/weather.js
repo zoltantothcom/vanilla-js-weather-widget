@@ -72,7 +72,9 @@ export default class Weather {
                 this.showCurrentConditions(data);
                 this.element.querySelector('.weather__get-hourly').classList.remove('weather__get-hourly--hidden');
                 this.element.querySelector('.weather__location').innerText = `Weather in ${this.city}`;
-                //this.getHourlyForecast();
+                this.element.querySelector('.weather__get-hourly').addEventListener('click', e => {
+                    this.getHourlyForecast();
+                }, false);
             })
             .catch(function (err) {
                 console.log(`Error: ${err}`);
@@ -89,7 +91,7 @@ export default class Weather {
         fetch(`${API_URL}/forecasts/v1/hourly/12hour/${this.location}?apikey=${API_KEY}&metric=true`)
             .then(response => { return response.json(); })
             .then(data => {
-                //console.log(data)
+                console.log(data)
             })
             .catch(function (err) {
                 console.log(err);
