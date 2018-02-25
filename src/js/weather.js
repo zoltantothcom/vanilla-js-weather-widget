@@ -8,77 +8,76 @@
 * @description
 * A vanilla JavaScript weather widget.
 */
-const API_URL = 'https://dataservice.accuweather.com'
-const API_KEY = 'Anwu0N8FAUGXlEUzxvWeEwx9eJ3OAAGS'
-const API_ERR = 'Unfortunately an API error occured.'
+const API_URL = 'https://dataservice.accuweather.com';
+const API_KEY = 'Anwu0N8FAUGXlEUzxvWeEwx9eJ3OAAGS';
+const API_ERR = 'Unfortunately an API error occured.';
 
 export default class Weather {
     constructor() {
-        this.element = document.querySelector('.weather')
-        this.location = null
-        this.locations = {}
-        this.input = this.element.querySelector('.weather__input')
+        this.element = document.querySelector('.weather');
+        this.location = null;
+        this.locations = {};
+        this.input = this.element.querySelector('.weather__input');
 
         this.element.querySelector('.weather__form').addEventListener('submit', e => {
             e.preventDefault();
 
-            this.city = 'Toronto'
-            this.getCurrentWeather()
+            this.city = 'Toronto';
+            this.getCurrentWeather();
             //this.getCurrentWeather(this.input.value)
-        }, false)
+        }, false);
 
         localStorage.setItem('WEATHER_LOCATIONS', JSON.stringify(this.locations));
 
-        this.getCurrentWeather = this.getCurrentWeather.bind(this)
-        this.getHourlyForecast = this.getHourlyForecast.bind(this)
-        this.displayMessage = this.displayMessage.bind(this)
-        this.showCurrentConditions = this.showCurrentConditions.bind(this)
-        this.getCachedLocations = this.getCachedLocations.bind(this)
-        this.getCityId = this.getCityId.bind(this)
-        this.getCityWeather = this.getCityWeather.bind(this)
+        this.getCurrentWeather = this.getCurrentWeather.bind(this);
+        this.getHourlyForecast = this.getHourlyForecast.bind(this);
+        this.displayMessage = this.displayMessage.bind(this);
+        this.showCurrentConditions = this.showCurrentConditions.bind(this);
+        this.getCachedLocations = this.getCachedLocations.bind(this);
+        this.getCityId = this.getCityId.bind(this);
+        this.getCityWeather = this.getCityWeather.bind(this);
     }
 
     getCurrentWeather() {
-        let locations = this.getCachedLocations()
-        let weatherData = null
+        let locations = this.getCachedLocations();
 
         if (!locations[this.city.toLowerCase()]) {
             this.getCityId()
                 .then(json => {
-                    this.getCityWeather(json[0].Key)
-                })
+                    this.getCityWeather(json[0].Key);
+                });
         } else {
-            this.getCityWeather(locations[this.city.toLowerCase()])
+            this.getCityWeather(locations[this.city.toLowerCase()]);
         }
     }
 
     getCityId() {
         return fetch(`${API_URL}/locations/v1/cities/search?apikey=${API_KEY}&q=${this.city}`)
-            .then(response => { return response.json() })
+            .then(response => { return response.json(); })
             .catch(function (err) {
-                console.log(`Error: ${err}`)
-                this.displayMessage(API_ERR, 'error')
-            })
+                console.log(`Error: ${err}`);
+                this.displayMessage(API_ERR, 'error');
+            });
     }
 
     getCityWeather(id) {
-        this.location = id
-        this.locations[this.city.toLowerCase()] = this.location
+        this.location = id;
+        this.locations[this.city.toLowerCase()] = this.location;
 
         localStorage.setItem('WEATHER_LOCATIONS', JSON.stringify(this.locations));
 
         return fetch(`${API_URL}/currentconditions/v1/${this.location}?apikey=${API_KEY}&details=true`)
-            .then(response => { return response.json() })
+            .then(response => { return response.json(); })
             .then(data => {
-                this.showCurrentConditions(data)
-                this.element.querySelector('.weather__get-hourly').classList.remove('weather__get-hourly--hidden')
-                this.element.querySelector('.weather__location').innerText = `Weather in ${this.city}`
+                this.showCurrentConditions(data);
+                this.element.querySelector('.weather__get-hourly').classList.remove('weather__get-hourly--hidden');
+                this.element.querySelector('.weather__location').innerText = `Weather in ${this.city}`;
                 //this.getHourlyForecast();
             })
             .catch(function (err) {
-                console.log(`Error: ${err}`)
-                this.displayMessage(API_ERR, 'error')
-            })
+                console.log(`Error: ${err}`);
+                this.displayMessage(API_ERR, 'error');
+            });
     }
 
     getCachedLocations() {
@@ -88,31 +87,32 @@ export default class Weather {
 
     getHourlyForecast() {
         fetch(`${API_URL}/forecasts/v1/hourly/12hour/${this.location}?apikey=${API_KEY}&metric=true`)
-            .then(response => { return response.json() })
+            .then(response => { return response.json(); })
             .then(data => {
                 //console.log(data)
             })
             .catch(function (err) {
-                console.log(err)
-                this.displayMessage(API_ERR, 'error')
+                console.log(err);
+                this.displayMessage(API_ERR, 'error');
             });
     }
 
     showCurrentConditions(data) {
-        let temperatureElem = this.element.querySelector('.weather__temperature')
-        let detailsElem = this.element.querySelector('.weather__details')
-        let d = data[0]
+        let temperatureElem = this.element.querySelector('.weather__temperature');
+        let detailsElem = this.element.querySelector('.weather__details');
+        let d = data[0];
 
-        console.log(data)
+        console.log(data);
 
-        temperatureElem.innerHTML = `${Math.round(d.Temperature.Metric.Value)} &deg;${d.Temperature.Metric.Unit}`
+        temperatureElem.innerHTML = 
+            `${Math.round(d.Temperature.Metric.Value)} &deg;${d.Temperature.Metric.Unit}`;
     }
 
     displayMessage(msg, type) {
-        let elem = document.createElement('div')
+        let elem = document.createElement('div');
         elem.innerText = msg;
-        elem.classList.add(`weather-${type}`)
+        elem.classList.add(`weather-${type}`);
 
-        document.querySelector('.weather__form').prepend(elem)
+        document.querySelector('.weather__form').prepend(elem);
     }
 }
