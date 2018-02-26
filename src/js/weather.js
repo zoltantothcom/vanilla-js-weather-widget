@@ -92,11 +92,31 @@ export default class Weather {
             .then(response => { return response.json(); })
             .then(data => {
                 console.log(data)
+                this.displayHourlyForecast(data);
             })
             .catch(function (err) {
                 console.log(err);
                 this.displayMessage(API_ERR, 'error');
             });
+    }
+
+    displayHourlyForecast(data) {
+        if (!data || data.length === 0) {
+            this.displayMessage('No hourly data available.', 'info');
+        }
+
+        let ul = document.createElement('ul');
+        for (let i = 0; i < data.length; i++) {
+            let li = document.createElement('li');
+
+            li.innerHTML = `${data[i].DateTime} : ${data[i].IconPhrase} : `;
+            li.innerHTML += - `${Math.round(data[i].Temperature.Value)}`;
+            li.innerHTML += ` &deg;${data[i].Temperature.Unit}`;
+
+            ul.appendChild(li);
+        }
+
+        this.element.querySelector('.weather__hourly').appendChild(ul);
     }
 
     showCurrentConditions(data) {
