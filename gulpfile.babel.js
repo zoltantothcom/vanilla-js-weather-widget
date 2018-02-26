@@ -68,7 +68,7 @@ gulp.task('watch-html', function() {
     .pipe(browSync.stream());
 });
 
-gulp.task('watch', ['watch-js', 'watch-css', 'watch-html'], () => {
+gulp.task('watch', ['watch-js', 'watch-css', 'watch-html', 'move-img'], () => {
   browSync.init({
     server: './docs'
   });
@@ -76,6 +76,12 @@ gulp.task('watch', ['watch-js', 'watch-css', 'watch-html'], () => {
   gulp.watch('./src/js/*.js',     ['watch-js']);
   gulp.watch('./src/scss/*.scss', ['watch-css']);
   gulp.watch('./src/*.pug',       ['watch-html']);;
+});
+
+gulp.task('move-img', function() {
+  gulp.src('./src/img/*')
+    .pipe(gulp.dest('./docs/img'))
+    .pipe(browSync.stream());
 });
 
 gulp.task('default', ['watch']);
