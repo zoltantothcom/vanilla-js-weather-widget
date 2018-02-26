@@ -110,8 +110,9 @@ export default class Weather {
         for (let i = 0; i < data.length; i++) {
             let li = document.createElement('li');
 
-            li.innerHTML = `${this.formatDateHourly(data[i].DateTime)} : ${data[i].IconPhrase} : `;
-            li.innerHTML += - `${Math.round(data[i].Temperature.Value)}`;
+            li.innerHTML = `${this.formatDateTimeHourly(data[i].DateTime)} : `;
+            li.innerHTML += `${data[i].IconPhrase} : `;
+            li.innerHTML += `${Math.round(data[i].Temperature.Value)}`;
             li.innerHTML += ` &deg;${data[i].Temperature.Unit}`;
 
             ul.appendChild(li);
@@ -120,7 +121,7 @@ export default class Weather {
         this.element.querySelector('.weather__hourly').appendChild(ul);
     }
 
-    formatDateHourly(d) {
+    formatDateTimeHourly(d) {
         const date = new Date(d);
         let hour = date.getHours();
         let am_pm = 'AM';
@@ -131,6 +132,10 @@ export default class Weather {
 
         if (hour > 12) {
             hour -= 12;
+        }
+
+        if (hour === 0) {
+            hour = 12;
         }
     
         return (WEEKDAY[date.getDay()] + ' ' + hour + am_pm);
