@@ -110,7 +110,11 @@ export default class Weather {
         for (let i = 0; i < data.length; i++) {
             let li = document.createElement('li');
 
+            let icon = data[i].WeatherIcon < 10 ? 
+                `0${data[i].WeatherIcon}` : data[i].WeatherIcon;
+
             li.innerHTML = `${this.formatDateTimeHourly(data[i].DateTime)} : `;
+            li.innerHTML += `<img src="img/${icon}-s.png" alt="${data[i].IconPhrase}" />`;
             li.innerHTML += `${data[i].IconPhrase} : `;
             li.innerHTML += `${Math.round(data[i].Temperature.Value)}`;
             li.innerHTML += ` &deg;${data[i].Temperature.Unit}`;
