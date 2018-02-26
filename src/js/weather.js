@@ -113,11 +113,10 @@ export default class Weather {
             let icon = data[i].WeatherIcon < 10 ? 
                 `0${data[i].WeatherIcon}` : data[i].WeatherIcon;
 
-            li.innerHTML = `${this.formatDateTimeHourly(data[i].DateTime)} : `;
+            li.innerHTML = `${this.formatDateTimeHourly(data[i].DateTime)}`;
             li.innerHTML += `<img src="img/${icon}-s.png" alt="${data[i].IconPhrase}" />`;
-            li.innerHTML += `${data[i].IconPhrase} : `;
-            li.innerHTML += `${Math.round(data[i].Temperature.Value)}`;
-            li.innerHTML += ` &deg;${data[i].Temperature.Unit}`;
+            li.innerHTML += `${data[i].IconPhrase}`;
+            li.innerHTML += `<span>${Math.round(data[i].Temperature.Value)} &deg;${data[i].Temperature.Unit}</span>`;
 
             ul.appendChild(li);
         }
@@ -142,7 +141,7 @@ export default class Weather {
             hour = 12;
         }
     
-        return (WEEKDAY[date.getDay()] + ' ' + hour + am_pm);
+        return (`<span>${WEEKDAY[date.getDay()]}</span><span>${hour}${am_pm}</span>`);
     }
 
     showCurrentConditions(data) {

@@ -49,7 +49,7 @@ gulp.task('lint-js', function() {
 });
 
 gulp.task('watch-css', function() {
-  gulp.src('./src/scss/*.scss')
+  gulp.src('./src/scss/*')
     .pipe(sass())
     .pipe(cleanCSS())
     .pipe(rename({
