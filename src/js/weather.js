@@ -11,6 +11,7 @@
 const API_URL = 'https://dataservice.accuweather.com';
 const API_KEY = 'Anwu0N8FAUGXlEUzxvWeEwx9eJ3OAAGS';
 const API_ERR = 'Unfortunately an API error occured.';
+const WEEKDAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export default class Weather {
     constructor() {
@@ -109,7 +110,7 @@ export default class Weather {
         for (let i = 0; i < data.length; i++) {
             let li = document.createElement('li');
 
-            li.innerHTML = `${data[i].DateTime} : ${data[i].IconPhrase} : `;
+            li.innerHTML = `${this.formatDateHourly(data[i].DateTime)} : ${data[i].IconPhrase} : `;
             li.innerHTML += - `${Math.round(data[i].Temperature.Value)}`;
             li.innerHTML += ` &deg;${data[i].Temperature.Unit}`;
 
@@ -117,6 +118,22 @@ export default class Weather {
         }
 
         this.element.querySelector('.weather__hourly').appendChild(ul);
+    }
+
+    formatDateHourly(d) {
+        const date = new Date(d);
+        let hour = date.getHours();
+        let am_pm = 'AM';
+
+        if (hour >= 12) {
+            am_pm = 'PM';
+        }
+
+        if (hour > 12) {
+            hour -= 12;
+        }
+    
+        return (WEEKDAY[date.getDay()] + ' ' + hour + am_pm);
     }
 
     showCurrentConditions(data) {
